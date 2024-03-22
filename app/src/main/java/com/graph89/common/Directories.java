@@ -59,7 +59,11 @@ public class Directories
 
 	public static String getReceivedDirectory(Graph89ActivityBase activity)
 	{
-		return Util.GetMediaRootFolder(activity) + "graph89/received/";
+		// not sure what this is for (I think it may be that the calculator somehow sends a file to
+		// the PC) but it is never being called so instead point it to the internal storage and find
+		// some other way to access the file should the need arise
+		return Util.GetInternalAppStorage(activity) + "graph89/received/";
+		//return Util.GetMediaRootFolder(activity) + "graph89/received/";
 	}
 
 //	public static String getBackupDirectory(Graph89ActivityBase activity)

@@ -164,18 +164,18 @@ public class Util
 		return false;
 	}
 
-	public static String GetMediaRootFolder(Graph89ActivityBase activity)
-	{
-		File externalPath = Environment.getExternalStorageDirectory();
-		if (externalPath == null)
-		{
-			Graph89ActivityBase.AlertControlObj.SetTitleMessage("Error", "\nInternal storage is not available!!!\nIs your device connected to a PC with a USB cable? If so, disconnect it and restart the Graph89 application.");
-			activity.HandlerShowAlert();
-			return "No External Storage";
-		}
-
-		return externalPath.getAbsolutePath() + "/";
-	}
+//	public static String GetMediaRootFolder(Graph89ActivityBase activity)
+//	{
+//		File externalPath = Environment.getExternalStorageDirectory();
+//		if (externalPath == null)
+//		{
+//			Graph89ActivityBase.AlertControlObj.SetTitleMessage("Error", "\nInternal storage is not available!!!\nIs your device connected to a PC with a USB cable? If so, disconnect it and restart the Graph89 application.");
+//			activity.HandlerShowAlert();
+//			return "No External Storage";
+//		}
+//
+//		return externalPath.getAbsolutePath() + "/";
+//	}
 
 	public static String GetInternalAppStorage(Graph89ActivityBase activity)
 	{
