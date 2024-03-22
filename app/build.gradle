@@ -6,8 +6,8 @@ android {
         applicationId "com.Bisha.TI89EmuDonation"
         minSdkVersion 19
         targetSdkVersion 34
-        versionCode 1141
-        versionName "1.1.4a"
+        versionCode 1151
+        versionName "1.1.5a"
         ndk {
             // TODO: Fix 64-bit ABIs
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
