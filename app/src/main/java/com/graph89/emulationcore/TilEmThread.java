@@ -197,6 +197,7 @@ public class TilEmThread extends EmulatorThread implements Runnable
 							}
 						}
 
+						Util.deleteFile(EmulatorActivity.UploadFilesPath);
 						EmulatorActivity.UploadFilesPath = null;
 						Activity.HandlerHideProgressDialog();
 					}

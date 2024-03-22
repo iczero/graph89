@@ -20,22 +20,27 @@
 package com.graph89.emulationcore;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.SoundEffectConstants;
@@ -686,11 +691,35 @@ public class EmulatorActivity extends Graph89ActivityBase
 			switch (requestCode)
 			{
 				case EmulatorActivity.INSTALL_APP:
-					if (data.hasExtra(FilePickerActivity.EXTRA_FILE_PATH))
-					{
-						UploadFilesPath = data.getStringArrayListExtra(FilePickerActivity.EXTRA_FILE_PATH);
+					// The document selected by the user will be in "data.getData()". Copy each
+					// selected file to temporary location in the app-specific directory then append
+					// local path to UploadFilesPath (an ArrayList<String>) temporary file will then
+					// be deleted after use
+					if (data != null) {
+						if (data.getData() != null) {
+							// initialize the list
+							UploadFilesPath = new ArrayList<String>();
+							// process the single file and add it to the list
+							String localPath = Util.copyUriToLocalFile(this, data.getData());
+							UploadFilesPath.add(localPath);
+
+						} else if (data.getClipData() != null) {
+							// initialize the list
+							UploadFilesPath = new ArrayList<String>();
+							// loop through the files, get the local path and add it to the list
+							for(int i = 0; i < data.getClipData().getItemCount(); i++) {
+								String localPath = Util.copyUriToLocalFile(this, data.getClipData().getItemAt(i).getUri());
+								UploadFilesPath.add(localPath);
+							}
+						}
+
+					} else {
+						// data is null
+						Log.d("Graph89","File URI not found");
 					}
+
 					break;
+
 			}
 		}
 	}

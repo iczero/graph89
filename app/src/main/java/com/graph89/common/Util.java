@@ -29,10 +29,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -40,13 +42,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.OpenableColumns;
+import android.util.Log;
 
 import com.graph89.emulationcore.EmulatorActivity;
 import com.graph89.emulationcore.Graph89ActivityBase;
@@ -282,5 +288,87 @@ public class Util
 
 		fin.close();
 		fout.close();
+	}
+
+	public static String getFileName(Context context, Uri uri) {
+		String result = null;
+		if (uri.getScheme().equals("content")) {
+			Cursor cursor = context.getContentResolver().query(uri, null, null, null, null);
+			try {
+				if (cursor != null && cursor.moveToFirst()) {
+					int colIdx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+					if (colIdx >= 0) result = cursor.getString(colIdx);
+				}
+			} finally {
+				cursor.close();
+			}
+		}
+		if (result == null) {
+			result = uri.getPath();
+			int cut = result.lastIndexOf('/');
+			if (cut != -1) {
+				result = result.substring(cut + 1);
+			}
+		}
+		return result;
+	}
+
+	public static String copyUriToLocalFile(Context context, Uri source) {
+		String retVal = null;
+
+		// get the filename from the input URI
+		String filename = getFileName(context, source);
+		// and find the output directory/file
+		String pathFilename = context.getApplicationContext().getFilesDir().toString() + "/" + filename;
+		Log.d("Graph89","Dest: "+pathFilename);
+
+		// copy the selected file into internal storage
+		InputStream is = null;
+		OutputStream os = null;
+		try {
+			// open the input & output streams
+			is = context.getContentResolver().openInputStream(source);
+			os = context.getApplicationContext().openFileOutput(filename, 0);
+
+			// copy the streams
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = is.read(buffer)) > 0) {
+				os.write(buffer, 0, length);
+			}
+
+			// save the location of the internal copy
+			retVal = pathFilename;
+			Log.d("Graph89","Temporary file created: "+pathFilename);
+
+		} catch (Exception e) {
+			Log.d("Graph89","Caught exception copying input file to temporary file in app-specific directory: "+e.toString());
+		} finally {
+			try {
+				is.close();
+				os.close();
+			} catch (Exception e) {
+				Log.d("Graph89","Caught exception closing source file or temporary file: "+e.toString());
+			}
+		}
+
+		return retVal;
+	}
+
+
+	public static void deleteFile(String deleteFile) {
+		// delete the temporary file
+		File tmpFile = new File(deleteFile);
+		if (!tmpFile.delete()) {
+			Log.d("Graph89", "Could not delete temporary file: " + deleteFile);
+		} else {
+			Log.d("Graph89", "Temporary file deleted: " + deleteFile);
+		}
+	}
+
+	public static void deleteFile(ArrayList<String> deleteFiles) {
+		for(int i = 0; i < deleteFiles.size(); i++) {
+			deleteFile(deleteFiles.get(i));
+		}
 	}
 }

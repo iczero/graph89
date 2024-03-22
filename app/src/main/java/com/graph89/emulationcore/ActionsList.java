@@ -28,6 +28,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.AdapterView;
@@ -120,7 +121,7 @@ public class ActionsList extends ListView
 						ChooseUploadFiles();
 						break;
 					case TAKE_SCREENSHOT:
-						ScreenshotTaker screenshot = new ScreenshotTaker(activity, Directories.getScreenShotDirectory(activity));
+						ScreenshotTaker screenshot = new ScreenshotTaker(activity);
 						activity.HideActions();
 						screenshot.ShowDialog();
 						break;
@@ -228,13 +229,13 @@ public class ActionsList extends ListView
 
 	private void ChooseUploadFiles()
 	{
-		Intent myIntent = new Intent(mContext, FilePickerActivity.class);
-		myIntent.putExtra(FilePickerActivity.EXTRA_FILE_PATH, Environment.getExternalStorageDirectory().getAbsolutePath());
-		ArrayList<String> extensions = new ArrayList<String>();
-		AddAppExtensions(extensions);
-		myIntent.putExtra(FilePickerActivity.EXTRA_ACCEPTED_FILE_EXTENSIONS, extensions);
-		myIntent.putExtra(FilePickerActivity.EXTRA_FILE_TYPE, "APP");
-		myIntent.putExtra(FilePickerActivity.EXTRA_MULTISELECT, true);
+		// create new file selection intent
+		Intent myIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+		myIntent.addCategory(Intent.CATEGORY_OPENABLE);
+		myIntent.setType("*/*");
+		myIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+		myIntent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Environment.getExternalStorageDirectory().getAbsolutePath());
+		// start the intent
 		((EmulatorActivity) mContext).startActivityForResult(myIntent, EmulatorActivity.INSTALL_APP);
 	}
 

@@ -43,14 +43,18 @@ public class Directories
 		return folder;
 	}
 
-	public static String getScreenShotDirectory(Graph89ActivityBase activity)
-	{
-		return Util.GetMediaRootFolder(activity) + "graph89/screenshots/";
-	}
+//	public static String getScreenShotDirectory(Graph89ActivityBase activity)
+//	{
+//		return Util.GetMediaRootFolder(activity) + "graph89/screenshots/";
+//	}
 
 	public static String getLicenceFile(Graph89ActivityBase activity)
 	{
-		return Util.GetMediaRootFolder(activity) + "graph89/licence.lic";
+		// not sure what this file is for, but we can't access a location on the SD card anymore
+		// so instead point it to the internal storage and find some other way to get the file there
+		// should the need arise
+		return Util.GetInternalAppStorage(activity) + "graph89/licence.lic";
+		//return Util.GetMediaRootFolder(activity) + "graph89/licence.lic";
 	}
 
 	public static String getReceivedDirectory(Graph89ActivityBase activity)

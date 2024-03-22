@@ -29,6 +29,7 @@ import java.util.Locale;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -298,12 +299,7 @@ public class RomManagerActivity extends Graph89ActivityBase
 									// attempt to copy the temporary file
 									error = EmulatorActivity.nativeInstallROM(mBrowseText, newInstance.ImageFilePath, calculatorType, Util.Bool2Int(isRom));
 									// delete the temporary file
-									File tmpFile = new File(mBrowseText);
-									if (!tmpFile.delete()) {
-										Log.d("Graph89", "Could not delete temporary file: " + mBrowseText);
-									} else {
-										Log.d("Graph89", "Temporary file deleted: " + mBrowseText);
-									}
+									Util.deleteFile(mBrowseText);
 								}
 
 								if (error != 0 || rom_mismatch!=null)
@@ -448,29 +444,6 @@ public class RomManagerActivity extends Graph89ActivityBase
 		startActivityForResult(myIntent, ROM_BROWSE);
 	}
 
-	public String getFileName(Uri uri) {
-		String result = null;
-		if (uri.getScheme().equals("content")) {
-			Cursor cursor = getContentResolver().query(uri, null, null, null, null);
-			try {
-				if (cursor != null && cursor.moveToFirst()) {
-					int colIdx = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-					if (colIdx >= 0) result = cursor.getString(colIdx);
-				}
-			} finally {
-				cursor.close();
-			}
-		}
-		if (result == null) {
-			result = uri.getPath();
-			int cut = result.lastIndexOf('/');
-			if (cut != -1) {
-				result = result.substring(cut + 1);
-			}
-		}
-		return result;
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
@@ -491,10 +464,7 @@ public class RomManagerActivity extends Graph89ActivityBase
 							Log.d("Graph89", "Source: "+data.getData().toString());
 
 							// get the filename from the input URI
-							String filename = getFileName(data.getData());
-							// and find the output directory/file
-							String pathFilename = getApplicationContext().getFilesDir().toString() + "/" + filename;
-							Log.d("Graph89","Dest: "+pathFilename);
+							String filename = Util.getFileName(this, data.getData());
 
 							//check if file extension is correct
 							String[] split = filename.split("\\.");
@@ -506,35 +476,7 @@ public class RomManagerActivity extends Graph89ActivityBase
 								ext.equalsIgnoreCase("9xu") ||
 								ext.equalsIgnoreCase("tib")
 							) {
-								// copy the selected file into internal storage
-								InputStream is = null;
-								OutputStream os = null;
-								try {
-									// open the input & output streams
-									is = getContentResolver().openInputStream(data.getData());
-									os = getApplicationContext().openFileOutput(filename, 0);
-
-									// copy the streams
-									byte[] buffer = new byte[1024];
-									int length;
-									while ((length = is.read(buffer)) > 0) {
-										os.write(buffer, 0, length);
-									}
-
-									// save the location of the internal copy
-									mBrowseText = pathFilename;
-
-								} catch (Exception e) {
-									Log.d("Graph89","Caught exception copying input file to temporary file in app-specific directory: "+e.toString());
-								} finally {
-									try {
-										is.close();
-										os.close();
-									} catch (Exception e) {
-										Log.d("Graph89","Caught exception closing source file or temporary file: "+e.toString());
-									}
-								}
-
+								mBrowseText = Util.copyUriToLocalFile(this, data.getData());
 							} else {
 								// bad file extension
 								String errorMsg = "Bad file extension: '"+ext+"'. Extension must be one of: .rom, .8Xu, .89u, .v2u, .9xu, .tib";

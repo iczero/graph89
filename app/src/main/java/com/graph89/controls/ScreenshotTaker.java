@@ -21,13 +21,19 @@ package com.graph89.controls;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,12 +48,10 @@ import com.graph89.emulationcore.EmulatorActivity;
 public class ScreenshotTaker
 {
 	private Context		mContext			= null;
-	private String		mScreenshotFolder	= null;
 
-	public ScreenshotTaker(Context context, String screenshotFolder)
+	public ScreenshotTaker(Context context)
 	{
 		mContext = context;
-		mScreenshotFolder = screenshotFolder;
 	}
 
 	public void ShowDialog()
@@ -63,7 +67,15 @@ public class ScreenshotTaker
 		final TextView constantpath = (TextView) view.findViewById(R.id.take_screenshot_readonly_path);
 		final EditText filenameEdit = (EditText) view.findViewById(R.id.take_screenshot_path);
 
-		constantpath.setText(mScreenshotFolder);
+		// retrieve media storage path
+		String pathMessage = " (Check /Pictures or /DCIM)";
+		try {
+			Uri imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+			pathMessage = imageCollection + pathMessage;
+		} catch (Exception e) {
+			Log.d("graph89", "caught exception finding MediaStore.Images path: "+e.toString());
+		}
+		constantpath.setText(pathMessage);
 
 		String dateNow = Util.getTimestamp();
 		filenameEdit.setText(dateNow + ".png");
@@ -102,21 +114,26 @@ public class ScreenshotTaker
 						{
 							if (!filename.endsWith(".png")) filename += ".png";
 
-							filename = mScreenshotFolder + filename;
-
-							final File f = new File(filename);
-							f.getParentFile().mkdirs();
-
 							Bitmap image = EmulatorActivity.CurrentSkin.Screen.getScreenShot();
 							if (image != null)
 							{
 								try
 								{
-									FileOutputStream out = new FileOutputStream(filename);
+									// access the images media store
+									ContentResolver resolver = mContext.getContentResolver();
+									Uri imageCollection = MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
+
+									// Get a URI for the new file
+									ContentValues newImageDetails = new ContentValues();
+									newImageDetails.put(MediaStore.Images.Media.DISPLAY_NAME, filename);
+									Uri imageUri = resolver.insert(imageCollection, newImageDetails);
+									Log.d("graph89", "imageUri="+imageUri.toString());
+
+									// open the output file
+									OutputStream out = mContext.getContentResolver().openOutputStream(imageUri);
 									image.compress(Bitmap.CompressFormat.PNG, 90, out);
 									out.close();
 
-									MediaScannerConnection.scanFile(mContext, new String[] { f.getAbsolutePath() }, null, null);
 									Util.ShowAlert((EmulatorActivity) mContext, "Screenshot", "Successfully saved emulated screen to " + filename);
 								}
 								catch (Exception e)

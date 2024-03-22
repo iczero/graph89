@@ -201,7 +201,8 @@ public class TIEmuThread extends EmulatorThread implements Runnable
 							
 							if (ret != 0) break;
 						}
-						
+
+						Util.deleteFile(EmulatorActivity.UploadFilesPath);
 						EmulatorActivity.UploadFilesPath = null;
 						Activity.HandlerHideProgressDialog();
 					}
