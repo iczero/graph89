@@ -16,6 +16,13 @@
         android:layout_marginTop="5dp"
         android:text="Make a Backup" />
 
+    <Button
+        android:id="@+id/backup_manager_restore_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Restore a Backup" />
+
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -24,22 +31,15 @@
         android:scaleType="fitXY"
         android:src="@android:drawable/divider_horizontal_dark" />
 
-    <ListView
-        android:id="@+id/backup_manager_backup_list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
-        android:visibility="visible">
-    </ListView>
-
     <TextView
-        android:id="@+id/backup_manager_nobackups_textview"
+        android:id="@+id/backup_manager_extension_message_textview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_gravity="center"
         android:layout_marginTop="50dip"
-        android:text="No backups are found"
+        android:text="File extension used by backup manager is: "
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="italic"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
 </LinearLayout>

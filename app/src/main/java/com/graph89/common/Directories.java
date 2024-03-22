@@ -62,10 +62,10 @@ public class Directories
 		return Util.GetMediaRootFolder(activity) + "graph89/received/";
 	}
 
-	public static String getBackupDirectory(Graph89ActivityBase activity)
-	{
-		return Util.GetMediaRootFolder(activity) + "graph89/backup/";
-	}
+//	public static String getBackupDirectory(Graph89ActivityBase activity)
+//	{
+//		return Util.GetMediaRootFolder(activity) + "graph89/backup/";
+//	}
 
 	public static String getRestoreDirectory(Graph89ActivityBase activity)
 	{
