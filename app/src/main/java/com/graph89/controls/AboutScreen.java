@@ -28,8 +28,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.Bisha.TI89EmuDonation.BuildConfig;
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.BuildConfig;
+import com.eanema.graph89.R;
 import com.graph89.emulationcore.EmulatorActivity;
 
 public class AboutScreen

@@ -34,7 +34,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.R;
 import com.graph89.common.Util;
 import com.graph89.emulationcore.EmulatorActivity;
 import com.graph89.emulationcore.TIEmuThread;

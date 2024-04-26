@@ -28,7 +28,7 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.R;
 import com.graph89.common.CalculatorConfiguration;
 import com.graph89.common.CalculatorInstance;
 import com.graph89.common.CalculatorInstanceHelper;

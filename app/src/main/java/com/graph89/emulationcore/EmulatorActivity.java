@@ -52,7 +52,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Toast;
 
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.R;
 import com.graph89.common.BackwardCompatibility;
 import com.graph89.common.CalculatorInfoTI84;
 import com.graph89.common.CalculatorInfoTI89;

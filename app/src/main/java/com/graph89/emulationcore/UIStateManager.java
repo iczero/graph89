@@ -24,7 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.R;
 import com.graph89.common.CalculatorInstanceHelper;
 import com.graph89.controls.ControlBar;
 import com.graph89.controls.MessageView;

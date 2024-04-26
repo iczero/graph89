@@ -56,7 +56,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.R;
 import com.graph89.common.CalculatorInstance;
 import com.graph89.common.CalculatorInstanceHelper;
 import com.graph89.common.CalculatorTypes;

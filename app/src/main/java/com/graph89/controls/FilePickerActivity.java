@@ -41,7 +41,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.R;
 import com.graph89.emulationcore.EmulatorActivity;
 
 public class FilePickerActivity extends Activity

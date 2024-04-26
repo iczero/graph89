@@ -60,7 +60,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.Bisha.TI89EmuDonation.R;
+import com.eanema.graph89.R;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.graph89.common.CalculatorInstance;
