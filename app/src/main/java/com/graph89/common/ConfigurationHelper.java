@@ -38,7 +38,7 @@ public class ConfigurationHelper
 	public static final boolean CONF_DEFAULT_HIDE_STATUSBAR = false;
 	public static final boolean CONF_DEFAULT_KEEP_SCREEN_ON = false;
 	public static final int CONF_DEFAULT_AUTO_OFF = 5;
-	public static final int CONF_DEFAULT_HAPTIC_FEEDBACK = 8;
+	public static final boolean CONF_DEFAULT_HAPTIC_FEEDBACK = true;
 	public static final boolean CONF_DEFAULT_AUDIO_FEEDBACK = false;
 
 	private static SharedPreferences getSharedPrefs(Context context) {

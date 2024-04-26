@@ -42,6 +42,7 @@ import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
@@ -111,10 +112,10 @@ public class EmulatorActivity extends Graph89ActivityBase
 	public static int lastButtonPressed = -1;
 	public static int lastlastButtonPressed = -1;
 
-	private static Vibrator vibratorService;
 	private static AudioManager	audioManager;
-	private static int hapticFeedback;
+	private static boolean hapticFeedback;
 	private static boolean audioFeedback;
+	private static View view;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -148,7 +149,7 @@ public class EmulatorActivity extends Graph89ActivityBase
 			InitMembers();
 		}
 
-		hapticFeedback = ConfigurationHelper.getInt(this, ConfigurationHelper.CONF_KEY_HAPTIC_FEEDBACK,
+		hapticFeedback = ConfigurationHelper.getBoolean(this, ConfigurationHelper.CONF_KEY_HAPTIC_FEEDBACK,
 				ConfigurationHelper.CONF_DEFAULT_HAPTIC_FEEDBACK);
 		audioFeedback = ConfigurationHelper.getBoolean(this, ConfigurationHelper.CONF_KEY_AUDIO_FEEDBACK,
 				ConfigurationHelper.CONF_DEFAULT_AUDIO_FEEDBACK);
@@ -514,8 +515,8 @@ public class EmulatorActivity extends Graph89ActivityBase
 			{
 				LastTouched = new Date();
 
-				if (vibratorService != null && hapticFeedback > 0) {
-					vibratorService.vibrate(hapticFeedback);
+				if (view != null && hapticFeedback) {
+					view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP);
 				}
 				if (audioManager != null && audioFeedback) {
 					audioManager.playSoundEffect(SoundEffectConstants.CLICK,1.0f);
@@ -622,7 +623,7 @@ public class EmulatorActivity extends Graph89ActivityBase
 			UniqueId = getUniqueId();
 
 			UIStateManagerObj.EmulatorViewIntstance.setOnTouchListener(UIStateManagerObj.EmulatorViewIntstance);
-			vibratorService = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+			view = findViewById(R.id.RootView);
 			audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 			LastTouched = new Date();

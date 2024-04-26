@@ -16,7 +16,7 @@ public class GlobalConfigurationPage extends PreferenceActivity implements OnSha
 	private CheckBoxPreference mPrefFullscreen;
 	private CheckBoxPreference mPrefKeepScreenOn;
 	private SeekBarPreference mPrefAutoOff;
-	private SeekBarPreference mPrefHapticFeedback;
+	private CheckBoxPreference mPrefHapticFeedback;
 	private CheckBoxPreference mPrefAudioFeedback;
 
 	@Override
@@ -64,11 +64,9 @@ public class GlobalConfigurationPage extends PreferenceActivity implements OnSha
 		mPrefAutoOff.ValuePost = " min";
 		mPrefAutoOff.ValueMIN = "Never";
 
-		mPrefHapticFeedback = (SeekBarPreference) getPreferenceScreen().findPreference(ConfigurationHelper.CONF_KEY_HAPTIC_FEEDBACK);
-		mPrefHapticFeedback.setCurrentValue(ConfigurationHelper.getInt(this,
+		mPrefHapticFeedback = (CheckBoxPreference) findPreference(ConfigurationHelper.CONF_KEY_HAPTIC_FEEDBACK);
+		mPrefHapticFeedback.setChecked(ConfigurationHelper.getBoolean(this,
 				ConfigurationHelper.CONF_KEY_HAPTIC_FEEDBACK, ConfigurationHelper.CONF_DEFAULT_HAPTIC_FEEDBACK));
-		mPrefHapticFeedback.ValuePost = " ms";
-		mPrefHapticFeedback.ValueMIN = "Disabled";
 
 		mPrefAudioFeedback = (CheckBoxPreference) findPreference(ConfigurationHelper.CONF_KEY_AUDIO_FEEDBACK);
 		mPrefAudioFeedback.setChecked(ConfigurationHelper.getBoolean(this,
@@ -87,8 +85,8 @@ public class GlobalConfigurationPage extends PreferenceActivity implements OnSha
 			ConfigurationHelper.writeInt(this, ConfigurationHelper.CONF_KEY_AUTO_OFF,
 					mPrefAutoOff.getCurrentValue());
 		} else if (key.equals(mPrefHapticFeedback.getKey())) {
-			ConfigurationHelper.writeInt(this, ConfigurationHelper.CONF_KEY_HAPTIC_FEEDBACK,
-					mPrefHapticFeedback.getCurrentValue());
+			ConfigurationHelper.writeBoolean(this, ConfigurationHelper.CONF_KEY_HAPTIC_FEEDBACK,
+					mPrefHapticFeedback.isChecked());
 		} else if (key.equals(mPrefAudioFeedback.getKey())) {
 			ConfigurationHelper.writeBoolean(this, ConfigurationHelper.CONF_KEY_AUDIO_FEEDBACK,
 					mPrefAudioFeedback.isChecked());
