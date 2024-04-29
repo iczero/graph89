@@ -29,9 +29,6 @@ android {
         }
     }
     namespace 'com.eanema.graph89'
-    buildFeatures {
-        buildConfig true
-    }
 }
 
 dependencies {
