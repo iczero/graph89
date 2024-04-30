@@ -1,0 +1,11 @@
+Emulate any of the following calculators:
+
+* TI89, TI89T
+* TI92, TI92+
+* V200
+* TI84+, TI84+SE
+* TI83, TI83+, TI83+SE
+
+No ROM images are included. You can extract one from your own calculator or if you have a physical device, download an OS upgrade image from TI.
+
+This is a fork of <a href="https://f-droid.org/en/packages/com.Bisha.TI89EmuDonation/">Graph 89</a> to support 64-bit OS architectures and the modern Android Storage Access Framework
