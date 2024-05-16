@@ -43,7 +43,7 @@ import com.graph89.common.Util;
 public class TIEmuThread extends EmulatorThread implements Runnable
 {
 	public static volatile int	EngineLoopSleep		= 30;
-	public static volatile int	ScreenLoopSleep		= 50;
+	public static volatile int	ScreenLoopSleep		= 30;
 
 	public static String		ReceivedFilePath	= null;
 	public static String		ReceivedFileName	= null;
@@ -67,20 +67,15 @@ public class TIEmuThread extends EmulatorThread implements Runnable
 		@Override
 		public void run()
 		{
-			boolean prevScreenOff = true;
 			SkinBase skin = EmulatorActivity.CurrentSkin;
-			boolean isScreenOff = false;
 
-			while (KillFlag == false)
+			while (!KillFlag)
 			{
 				try
 				{
 					if (!IsSleeping)
 					{
 						skin.Screen.refresh();
-
-						isScreenOff = skin.Screen.isScreenOff();
-						prevScreenOff = isScreenOff;
 					}
 
 					Thread.sleep(TIEmuThread.ScreenLoopSleep);
@@ -232,14 +227,8 @@ public class TIEmuThread extends EmulatorThread implements Runnable
 
 					if (turbo && !IsSleeping)
 					{
-						// run it in a loop.
-						//one iteration takes 4ms
-						for (int i = 0; i < 30 && KillFlag == false && skin.Screen.isBusy(); ++i)
-						{
-							EmulatorActivity.nativeTiEmuRunEngine();
-						}
-
-						Thread.sleep(1);
+						// do not read screen contents
+						skin.Screen.refresh(false);
 					}
 					else
 					{

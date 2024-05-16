@@ -87,14 +87,15 @@ void graph89_clean_commons()
 	is_tilem = false;
 }
 
-int graph89_read_emulated_screen (uint8_t *return_flags)
+int graph89_read_emulated_screen (uint8_t *return_flags, uint8_t read_contents)
 {
 	if (is_tiemu)
 	{
-		return tiemu_read_emulated_screen(return_flags);
+		return tiemu_read_emulated_screen(return_flags, read_contents);
 	}
 	else if (is_tilem)
 	{
+		/* ignore read_contents */
 		return tilem_read_emulated_screen(return_flags);
 	}
 }

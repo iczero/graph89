@@ -37,10 +37,10 @@ JNIEXPORT void JNICALL Java_com_graph89_emulationcore_EmulatorActivity_nativeCle
 	LOGI("Clean Graph89");
 }
 
-JNIEXPORT jint JNICALL Java_com_graph89_emulationcore_EmulatorActivity_nativeReadEmulatedScreen(JNIEnv * env, jobject obj, jbyteArray jFlags)
+JNIEXPORT jint JNICALL Java_com_graph89_emulationcore_EmulatorActivity_nativeReadEmulatedScreen(JNIEnv * env, jobject obj, jbyteArray jFlags, jboolean readContents)
 {
 	uint8_t *flags = (*env)->GetByteArrayElements(env, jFlags, 0);
-	int crc = graph89_read_emulated_screen(flags);
+	int crc = graph89_read_emulated_screen(flags, readContents);
 	(*env)->ReleaseByteArrayElements(env, jFlags, flags, 0);
 	return (jint)crc;
 }

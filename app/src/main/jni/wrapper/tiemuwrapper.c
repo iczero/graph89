@@ -176,7 +176,7 @@ void tiemu_run_engine()
 	hw_m68k_run(cpu_cycles / 4);
 }
 
-int tiemu_read_emulated_screen (uint8_t *return_flags)
+int tiemu_read_emulated_screen (uint8_t *return_flags, uint8_t read_contents)
 {
 	int i, j, k;
 	uint32_t crc = 0xFFFFFFFF;
@@ -188,17 +188,20 @@ int tiemu_read_emulated_screen (uint8_t *return_flags)
 
 	int CRC = 0;
 
-	if (!tihw.on_off)
+	if (read_contents)
 	{
-		CRC = read_screen_blank();
-	}
-	else if (!enable_grayscale)
-	{
-		CRC = read_screen_BW();
-	}
-	else
-	{
-		CRC = read_screen_grayscale();
+		if (!tihw.on_off)
+		{
+			CRC = read_screen_blank();
+		}
+		else if (!enable_grayscale)
+		{
+			CRC = read_screen_BW();
+		}
+		else
+		{
+			CRC = read_screen_grayscale();
+		}
 	}
 
 	return_flags[0] = tihw.on_off == 0; //is screen off

@@ -100,7 +100,7 @@
 	void graph89_init_commons(int calc_type, int screen_width, int screen_height, int zoom, bool is_grayscale, bool is_grid, uint32_t pixel_on_color,
 			uint32_t pixel_off_color, uint32_t grid_color, double speed_coefficient, const char* tmp_dir);
 	void graph89_clean_commons();
-	int  graph89_read_emulated_screen (uint8_t *return_flags);
+	int  graph89_read_emulated_screen (uint8_t *return_flags, uint8_t read_contents);
 	void graph89_get_emulated_screen (uint32_t* out_buffer, int out_buffer_length);
 	void graph89_update_screen_zoom(int screen_zoom);
 	int  graph89_install_rom(const char* source, const char* destination, int calc_type, int is_rom);

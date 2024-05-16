@@ -187,7 +187,7 @@ public class EmulatorScreen
 		Flags = new byte[6];
 	}
 
-	public void refresh()
+	public void refresh(boolean readContents)
 	{
 		synchronized (EmulatorScreen.ScreenChangeLock)
 		{
@@ -198,9 +198,11 @@ public class EmulatorScreen
 				EmulatorActivity.TiEmuSetScreenParams(this);
 			}
 			
-			int newCRC = EmulatorActivity.nativeReadEmulatedScreen(Flags);
+			int newCRC = EmulatorActivity.nativeReadEmulatedScreen(Flags, readContents);
 			isScreenOff = Flags[0] != 0;
 			isBusy = Flags[1] != 0;
+
+			if (!readContents) return;
 
 			if (CRC != newCRC || cntr % 40 == 0)
 			{
@@ -209,6 +211,11 @@ public class EmulatorScreen
 				EmulatorActivity.UIStateManagerObj.EmulatorViewIntstance.postInvalidate();
 			}
 		}
+	}
+
+	public void refresh()
+	{
+		refresh(true);
 	}
 
 	public boolean isBusy()
@@ -231,7 +238,7 @@ public class EmulatorScreen
 
 			byte[] flags = new byte[6];
 
-			EmulatorActivity.nativeReadEmulatedScreen(flags);
+			EmulatorActivity.nativeReadEmulatedScreen(flags, true);
 
 			int[] data = new int[EngineScreenParams.RawWidth * EngineScreenParams.RawHeight * EngineScreenParams.Zoom * EngineScreenParams.Zoom];
 
