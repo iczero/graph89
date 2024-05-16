@@ -142,6 +142,7 @@ public class TIEmuThread extends EmulatorThread implements Runnable
 				EmulatorActivity.UIStateManagerObj.EmulatorViewIntstance.postInvalidate();
 
 				boolean turbo = false;
+				int turboCount = 0;
 				int runCntr = 0;
 
 				int sleepInterval = (int) ((float) TIEmuThread.EngineLoopSleep / speedCoefficient);
@@ -230,16 +231,16 @@ public class TIEmuThread extends EmulatorThread implements Runnable
 
 					turbo = EmulatorActivity.ActiveInstance.Configuration.OverclockWhenBusy && skin.Screen.isBusy();
 
-					if (turbo && !IsSleeping)
-					{
-						// run it in a loop.
-						//one iteration takes 4ms
-						for (int i = 0; i < 30 && KillFlag == false && skin.Screen.isBusy(); ++i)
-						{
-							EmulatorActivity.nativeTiEmuRunEngine();
-						}
+					if (turbo) {
+						turboCount++;
+					} else {
+						turboCount = 0;
+					}
 
-						Thread.sleep(1);
+					// wait a few frames before turboing
+					if (turboCount > 2 && !IsSleeping)
+					{
+						// don't sleep if turbo
 					}
 					else
 					{
